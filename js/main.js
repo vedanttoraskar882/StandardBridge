@@ -21,15 +21,6 @@
   const closePilotModalBtn = document.getElementById('closePilotModal');
   const openPilotButtons = document.querySelectorAll('.open-pilot-modal');
 
-  const storageInspectorModal = document.getElementById('storageInspectorModal');
-  const openStorageInspectorBtn = document.getElementById('openStorageInspectorBtn');
-  const closeInspectorModalBtn = document.getElementById('closeInspectorModal');
-  const closeInspectorFooterBtn = document.getElementById('closeInspectorFooterBtn');
-  const refreshSubmissionsBtn = document.getElementById('refreshSubmissionsBtn');
-  const submissionsTableBody = document.getElementById('submissionsTableBody');
-  const inspectorEmptyState = document.getElementById('inspectorEmptyState');
-  const submissionCountBadge = document.getElementById('submissionCountBadge');
-
   const legalModal = document.getElementById('legalModal');
   const closeLegalModalBtn = document.getElementById('closeLegalModal');
   const closeLegalFooterBtn = document.getElementById('closeLegalFooterBtn');
@@ -79,18 +70,10 @@
       // Append new submission
       currentList.push(submission);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentList));
-      updateSubmissionCounter();
       return true;
     } catch (e) {
       console.error('StandardsBridge: Error writing to localStorage', e);
       return false;
-    }
-  }
-
-  function updateSubmissionCounter() {
-    const list = getSubmissions();
-    if (submissionCountBadge) {
-      submissionCountBadge.textContent = list.length;
     }
   }
 
@@ -273,66 +256,11 @@
           inp.closest('.form-group').classList.remove('has-error');
         }
       });
-
-      // If submitted inside modal, keep modal open briefly or let user close
-      if (prefix === 'modal') {
-        setTimeout(() => {
-          // If the inspector is open in background, refresh it
-          renderSubmissionsTable();
-        }, 300);
-      } else {
-        renderSubmissionsTable();
-      }
     });
   }
 
   /* ==========================================================================
-     3. LOCAL STORAGE INSPECTOR (Client-Side Verification Tool)
-     ========================================================================== */
-
-  function renderSubmissionsTable() {
-    if (!submissionsTableBody) return;
-    const submissions = getSubmissions();
-
-    submissionsTableBody.innerHTML = '';
-    if (submissions.length === 0) {
-      if (inspectorEmptyState) inspectorEmptyState.style.display = 'flex';
-      const table = document.getElementById('submissionsTable');
-      if (table) table.style.display = 'none';
-      return;
-    }
-
-    if (inspectorEmptyState) inspectorEmptyState.style.display = 'none';
-    const table = document.getElementById('submissionsTable');
-    if (table) table.style.display = 'table';
-
-    // Render most recent first
-    [...submissions].reverse().forEach((sub, idx) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight:700;">#${submissions.length - idx}</td>
-        <td><strong>${escapeHtml(sub.fullName)}</strong></td>
-        <td>${escapeHtml(sub.organisationName)}</td>
-        <td><a href="mailto:${escapeHtml(sub.email)}" style="color: var(--accent-cyan); text-decoration: none;">${escapeHtml(sub.email)}</a></td>
-        <td style="font-family: var(--font-mono);">${escapeHtml(sub.phone)}</td>
-        <td style="font-size: 0.82rem; color: var(--text-muted);">${escapeHtml(sub.submissionFormattedUK || sub.submissionDateTime)}</td>
-      `;
-      submissionsTableBody.appendChild(tr);
-    });
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  /* ==========================================================================
-     4. MODAL MANAGEMENT
+     3. MODAL MANAGEMENT
      ========================================================================== */
 
   function openModal(modalEl) {
@@ -366,30 +294,6 @@
 
     if (closePilotModalBtn) {
       closePilotModalBtn.addEventListener('click', () => closeModal(pilotModal));
-    }
-
-    // Inspector Modal
-    if (openStorageInspectorBtn) {
-      openStorageInspectorBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        renderSubmissionsTable();
-        openModal(storageInspectorModal);
-      });
-    }
-
-    if (closeInspectorModalBtn) {
-      closeInspectorModalBtn.addEventListener('click', () => closeModal(storageInspectorModal));
-    }
-
-    if (closeInspectorFooterBtn) {
-      closeInspectorFooterBtn.addEventListener('click', () => closeModal(storageInspectorModal));
-    }
-
-    if (refreshSubmissionsBtn) {
-      refreshSubmissionsBtn.addEventListener('click', () => {
-        renderSubmissionsTable();
-        updateSubmissionCounter();
-      });
     }
 
     // Legal Modal
@@ -439,7 +343,7 @@
     }
 
     // Close on backdrop click
-    [pilotModal, storageInspectorModal, legalModal].forEach(modal => {
+    [pilotModal, legalModal].forEach(modal => {
       if (!modal) return;
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -452,7 +356,6 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal(pilotModal);
-        closeModal(storageInspectorModal);
         closeModal(legalModal);
         closeMobileDrawer();
       }
@@ -574,7 +477,6 @@
     setupModals();
     setupFaqAccordion();
     setupNavigation();
-    updateSubmissionCounter();
   }
 
   // Run on DOM ready

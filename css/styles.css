@@ -2248,65 +2248,6 @@ h1, h2, h3, h4 {
   margin-top: 14px;
 }
 
-/* Local Submissions Inspector Table */
-.inspector-table-wrapper {
-  margin-top: 16px;
-  margin-bottom: 24px;
-  max-height: 380px;
-  overflow-y: auto;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  background: rgba(7, 11, 18, 0.5);
-}
-
-.inspector-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-  text-align: left;
-}
-
-.inspector-table th {
-  background: rgba(255, 255, 255, 0.04);
-  padding: 12px 14px;
-  color: var(--text-muted);
-  font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  white-space: nowrap;
-}
-
-.inspector-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--text-main);
-  vertical-align: middle;
-}
-
-.inspector-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.inspector-empty {
-  padding: 48px 24px;
-  text-align: center;
-  color: var(--text-subtle);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.inspector-empty svg {
-  color: var(--text-dim);
-}
-
-.inspector-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
 .code-inline {
   font-family: var(--font-mono);
   font-size: 0.85em;
