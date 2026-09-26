@@ -7,7 +7,8 @@
   'use strict';
 
   // Constants
-  const STORAGE_KEY = 'standardsbridge_pilot_requests';
+  const STORAGE_KEY = 'standardsbridgePilotRequests';
+  const LEGACY_STORAGE_KEY = 'standardsbridge_pilot_requests';
 
   // DOM Elements - Navigation
   const siteHeader = document.getElementById('siteHeader');
@@ -48,7 +49,10 @@
    */
   function getSubmissions() {
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
+      let data = localStorage.getItem(STORAGE_KEY);
+      if (!data) {
+        data = localStorage.getItem(LEGACY_STORAGE_KEY);
+      }
       if (!data) return [];
       const parsed = JSON.parse(data);
       return Array.isArray(parsed) ? parsed : [];
